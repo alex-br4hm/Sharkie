@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  color: white;
+  font-family: sans-serif;
+  background: url(./graphics/3_background/Dark/1.png);
+  position: relative;
+  box-sizing: border-box;
+}
+
+header {
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+header h1 {
+  font-size: 60px;
+  background: rgba(0, 0, 255, 0.151);
+  padding: 1.2%;
+  font-family: cursive;
+  border-radius: 50%;
+  margin-bottom: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.534);
+}
+
+.content-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+canvas {
+  background-color: black;
+  outline: 5px solid rgba(255, 255, 255, 0.452);
+  border-radius: 20px;
+}
