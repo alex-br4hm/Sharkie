@@ -6,15 +6,24 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="shortcut icon" href="./graphics/2_enemy/2 Jelly fish/Súper dangerous/Pink 1.png" type="image/x-icon" />
     <title>Sharkie</title>
+
+    <script src="./models/movable_object.class.js"></script>
+    <script src="./models/character.class.js"></script>
+    <script src="./models/pufferfish.class.js"></script>
+    <script src="./models/light.class.js"></script>
+    <script src="./models/world.class.js"></script>
+    <script src="./js/game.js"></script>
   </head>
 
-  <body>
+  <body onload="init()">
     <header>
       <h1>Sharkie</h1>
-      <p>just keep swimming</p>
+      <!-- <p>just keep swimming</p> -->
     </header>
     <div class="content-container">
-      <canvas width="720" height="480"></canvas>
+      <canvas id="canvas" width="720" height="480"></canvas>
     </div>
   </body>
 </html>
+
+<!-- <img src="" alt=""> -->
