@@ -8,8 +8,7 @@ class Character extends MovableObject {
     './graphics/1_sharkie/3.Swim/6.png'
   ];
   world;
-  keyboard;
-  animationSpeed;
+  swimming_sound = new Audio('audio/swim.mp3');
 
   constructor() {
     super().loadImg('./graphics/1_sharkie/3.Swim/1.png');
@@ -18,21 +17,47 @@ class Character extends MovableObject {
     this.height = 200;
     this.width = 160;
     this.y = 150;
-    this.x = 0;
+    this.x = 50;
     this.animationSpeed = 150;
-    this.animate();
+    this.move();
+  }
+
+  move() {
+    setInterval(() => {
+      this.swimming_sound.pause();
+      if (this.world.keyboard.UP) {
+        this.y -= 4;
+      }
+      if (this.world.keyboard.DOWN) {
+        this.y += 4;
+      }
+
+      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        this.x += 4;
+        this.otherDirection = false;
+        this.world.camera_x = -this.x + 50;
+        this.swimming_sound.play();
+      }
+      if (this.world.keyboard.LEFT && this.x > -500) {
+        this.x -= 4;
+        this.otherDirection = true;
+        this.world.camera_x = -this.x + 50;
+        this.swimming_sound.play();
+      }
+    }, 1000 / 60);
+
+    setInterval(() => {
+      if (this.world.keyboard.UP || this.world.keyboard.DOWN || this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.animate();
+      }
+    }, 75);
   }
 
   animate() {
-    setInterval(() => {
-      if (this.world.keyboard.UP) {
-        let i = this.currentImage % this.IMAGES_SWIMMING.length;
-        let path = this.IMAGES_SWIMMING[i];
-        this.img.src = path;
-        this.currentImage++;
-      }
-    }, this.animationSpeed);
+    // swim animation
+    let i = this.currentImage % this.IMAGES_SWIMMING.length;
+    let path = this.IMAGES_SWIMMING[i];
+    this.img.src = path;
+    this.currentImage++;
   }
-
-  moveUp() {}
 }
