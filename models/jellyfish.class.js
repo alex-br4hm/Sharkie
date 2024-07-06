@@ -24,18 +24,17 @@ class Jellyfish extends MovableObject {
       this.y += this.direction;
       if (this.y <= 0) {
         this.direction = this.speed; // Wechsel zu nach unten
+        this.otherDirection = true;
       } else if (this.y >= 420) {
         this.direction = -this.speed; // Wechsel zu nach oben
+        this.otherDirection = false;
       }
     }, 1000 / 60);
   }
 
   animate() {
     setInterval(() => {
-      let i = this.currentImage % this.IMAGES_SWIMMING.length;
-      let path = this.IMAGES_SWIMMING[i];
-      this.img.src = path;
-      this.currentImage++;
+      this.playSwimAnimation();
     }, 100);
   }
 }

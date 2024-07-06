@@ -8,6 +8,7 @@ class MovableObject {
   currentImage = 0;
   speed;
   otherDirection = false;
+  energy = 100;
 
   loadImg(path) {
     this.img = new Image();
@@ -22,9 +23,43 @@ class MovableObject {
     });
   }
 
-  moveRight() {
-    console.log('moving right');
+  draw(ctx) {
+    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
-  moveLeft() {}
+  drawFrame(ctx) {
+    if (this instanceof Jellyfish || this instanceof Pufferfish || this instanceof Endboss) {
+      ctx.beginPath();
+      ctx.lineWidth = '3';
+      this;
+      ctx.strokeStyle = 'red';
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.stroke();
+    }
+    if (this instanceof Character) {
+      ctx.beginPath();
+      ctx.lineWidth = '3';
+      this;
+      ctx.strokeStyle = 'red';
+      ctx.rect(this.x + 20, this.y + 70, this.width - 40, this.height - 90);
+      ctx.stroke();
+    }
+  }
+
+  // characater.isColliding
+  isColliding(movableObject) {
+    return (
+      this.x + this.width > movableObject.x &&
+      this.y + this.height > movableObject.y &&
+      this.x < movableObject.x &&
+      this.y < movableObject.y + movableObject.height
+    );
+  }
+
+  playSwimAnimation() {
+    let i = this.currentImage % this.IMAGES_SWIMMING.length;
+    let path = this.IMAGES_SWIMMING[i];
+    this.img.src = path;
+    this.currentImage++;
+  }
 }
