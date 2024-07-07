@@ -1,50 +1,7 @@
-class MovableObject {
-  x;
-  y;
-  img;
-  height;
-  width;
-  imageCache = {};
-  currentImage = 0;
+class MovableObject extends DrawableObject {
   speed;
-  otherDirection = false;
   energy = 100;
-
-  loadImg(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  loadImgs(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      this.img.src = path;
-      this.imageCache[path] = img;
-    });
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-  }
-
-  drawFrame(ctx) {
-    if (this instanceof Jellyfish || this instanceof Pufferfish || this instanceof Endboss) {
-      ctx.beginPath();
-      ctx.lineWidth = '3';
-      this;
-      ctx.strokeStyle = 'red';
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
-    }
-    if (this instanceof Character) {
-      ctx.beginPath();
-      ctx.lineWidth = '3';
-      this;
-      ctx.strokeStyle = 'red';
-      ctx.rect(this.x + 20, this.y + 70, this.width - 40, this.height - 90);
-      ctx.stroke();
-    }
-  }
+  lastHit = 0;
 
   // characater.isColliding
   isColliding(movableObject) {
@@ -56,9 +13,24 @@ class MovableObject {
     );
   }
 
-  playSwimAnimation() {
-    let i = this.currentImage % this.IMAGES_SWIMMING.length;
-    let path = this.IMAGES_SWIMMING[i];
+  getHit() {
+    this.energy -= 1;
+    // console.log(this.energy);
+    if (this.energy < 0) {
+      this.energy = 0;
+    } else {
+      this.lastHit = new Date().getTime();
+    }
+  }
+
+  isHurt() {
+    let timePassed = new Date().getTime() - this.lastHit;
+    return timePassed <= 500;
+  }
+
+  playAnimation(images_path) {
+    let i = this.currentImage % images_path.length;
+    let path = images_path[i];
     this.img.src = path;
     this.currentImage++;
   }
