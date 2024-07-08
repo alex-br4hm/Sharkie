@@ -95,11 +95,6 @@ class Character extends MovableObject {
     }, 150);
   }
 
-  // WIR SIND HIER
-  // PROBLEM:
-  // DIE STATUSBAR WIRD NICHT RICHTIG GEZEICHNET. WARUM?
-  //
-
   isDead() {
     return this.energy == 0;
   }
