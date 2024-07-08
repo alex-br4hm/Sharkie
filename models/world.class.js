@@ -6,6 +6,7 @@ class World {
   keyboard;
   camera_x = 0;
   statusBar = new Statusbar();
+  bubbles = [];
 
   constructor(canvas) {
     this.ctx = canvas.getContext('2d');
@@ -13,22 +14,34 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.checkCollisions();
+    this.run();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
-  checkCollisions() {
+  run() {
     setInterval(() => {
-      this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy)) {
-          this.character.getHit();
-          this.statusBar.setPercentage(this.character.energy);
-        }
-      });
+      this.checkCollisions();
+      this.checkBubbleShot();
     }, 200);
+  }
+
+  checkCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (this.character.isColliding(enemy)) {
+        this.character.getHit();
+        this.statusBar.setPercentage(this.character.energy);
+      }
+    });
+  }
+
+  checkBubbleShot() {
+    if (this.keyboard.KEY_B) {
+      let bubble = new BubbleShot();
+      this.bubbles.push(bubble);
+    }
   }
 
   draw() {
@@ -45,6 +58,10 @@ class World {
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
+
+    if (this.bubbles.length > 0) {
+      this.addObjectsToMap(this.bubbles);
+    }
 
     this.ctx.translate(-this.camera_x, 0);
 
