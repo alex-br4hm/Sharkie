@@ -12,6 +12,7 @@ class World {
   endboss = this.level.endboss;
 
   level_music = new Audio('audio/level_music.mp3');
+  bubble_shot_sound = new Audio('audio/bubble_shot.mp3');
 
   constructor(canvas) {
     this.ctx = canvas.getContext('2d');
@@ -102,6 +103,7 @@ class World {
 
   checkBubbleShot() {
     if (this.keyboard.KEY_B) {
+      this.bubble_shot_sound.play();
       if (!this.character.otherDirection) {
         let bubble = new BubbleShot();
         bubble.shotBubble(this.character.x, this.character.y);

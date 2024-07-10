@@ -87,6 +87,8 @@ class Character extends MovableObject {
     bottom: 30
   };
 
+  boss_music = new Audio('audio/boss_music.mp3');
+
   constructor() {
     super().loadImg('./graphics/1_sharkie/3.Swim/1.png');
     this.loadImgs(this.IMAGES_SWIMMING);
@@ -100,7 +102,7 @@ class Character extends MovableObject {
     this.height = 200;
     this.width = 160;
     this.y = 150;
-    this.x = 50;
+    this.x = 100;
     this.animationSpeed = 150;
     this.coins = 0;
     this.move();
@@ -146,14 +148,14 @@ class Character extends MovableObject {
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.bossIntroPlaying) {
         this.x += 4;
         this.otherDirection = false;
-        this.world.camera_x = -this.x + 50;
+        this.world.camera_x = -this.x + 100;
         this.swimming_sound.play();
       }
 
       if (this.world.keyboard.LEFT && this.x > -500 && !this.bossIntroPlaying) {
         this.x -= 4;
         this.otherDirection = true;
-        this.world.camera_x = -this.x + 50;
+        this.world.camera_x = -this.x + 100;
         this.swimming_sound.play();
       }
     }, 1000 / 60);
@@ -203,6 +205,8 @@ class Character extends MovableObject {
 
   startBossFight() {
     console.log('lets go');
+    this.boss_music.play();
+    // world.level_music.stop();
     this.world.level.endboss[0].init();
     setTimeout(() => {
       this.bossIntroPlaying = false;
