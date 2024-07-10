@@ -36,16 +36,28 @@ class Endboss extends MovableObject {
   ];
 
   constructor() {
-    super().loadImg(this.IMAGES_SWIMMING[0]);
+    super();
     this.loadImgs(this.IMAGES_SWIMMING);
     this.loadImgs(this.IMAGES_INTRO);
     this.loadImgs(this.IMAGES_ATTACK);
-    this.x = 2000;
-    this.y = -100;
+
+    // this.introduce();
+    this.attack();
+  }
+
+  init() {
+    this.loadImg(this.IMAGES_INTRO[0]);
+    this.offset = {
+      top: 200,
+      left: 20,
+      right: 40,
+      bottom: 80
+    };
     this.width = 500;
     this.height = 500;
+    this.x = 1300;
+    this.y = -100;
     this.introduce();
-    this.attack();
   }
 
   introduce() {
@@ -57,6 +69,7 @@ class Endboss extends MovableObject {
         currentImage++;
       } else {
         clearInterval(interval);
+
         this.animate();
       }
     }, 120);

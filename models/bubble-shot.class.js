@@ -5,16 +5,23 @@ class BubbleShot extends MovableObject {
     this.loadImgs(this.IMAGES_BUBBLE);
     this.x = world.character.x;
     this.y = world.character.y;
+    this.distance = 0;
     this.width = 40;
     this.height = 40;
-    this.shotBubble(this.x, this.y);
   }
 
   shotBubble(x, y) {
     this.y = y + 100;
-    this.x = x + 100;
+    this.otherDirection ? (this.x = x) : (this.x = x + 100);
+
     setInterval(() => {
-      this.x += 3;
+      if (this.otherDirection) {
+        this.x -= 3;
+        this.distance += 1;
+      } else {
+        this.x += 3;
+        this.distance += 1;
+      }
     }, 1000 / 60);
   }
 }
