@@ -31,8 +31,50 @@ header h1 {
   flex-direction: column;
 }
 
+.canvas-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.start-screen-container {
+  background-color: black;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+  background-image: url(./graphics/3_background/Mesa\ de\ trabajo\ 1.png);
+  background-size: cover;
+  background-position: right;
+}
+
+.start-game-btn {
+  position: absolute;
+  bottom: 10%;
+  right: 15%;
+  width: 40%;
+  transition: all 150ms ease-in-out;
+  cursor: pointer;
+  &:hover {
+    transform: scale(102%);
+    filter: brightness(120%);
+  }
+}
+
+.controls-info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 60%;
+}
+
 canvas {
   background-color: black;
   outline: 5px solid rgba(255, 255, 255, 0.452);
   border-radius: 20px;
+}
+
+.d-none {
+  display: none;
 }

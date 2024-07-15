@@ -10,6 +10,7 @@ class World {
   poisonBar = new Poisonbar();
   bubbles = [];
   endboss = this.level.endboss;
+  isShooting = false;
 
   level_music = new Audio('audio/level_music.mp3');
   bubble_shot_sound = new Audio('audio/bubble_shot.mp3');
@@ -22,9 +23,8 @@ class World {
     this.setWorld();
     this.run();
     this.level_music.loop = true;
-    document.getElementById('startButton').addEventListener('click', () => {
-      this.level_music.play();
-    });
+
+    this.level_music.play();
   }
 
   setWorld() {
@@ -49,13 +49,16 @@ class World {
   checkCollisionsBubbles() {
     this.bubbles.forEach((bubble, indexBubbles) => {
       if (bubble.distance > 70) {
-        // Bubble zerplatzt Animation
         this.bubbles.splice(indexBubbles, 1);
       }
       this.level.enemies.forEach((enemy, indexEnemies) => {
         if (enemy.isColliding(bubble)) {
-          console.log(this.level.enemies);
-          this.level.enemies.splice(indexEnemies, 1);
+          this.level.enemies[indexEnemies].isDead = true;
+          this.level.enemies[indexEnemies].x = this.level.enemies[indexEnemies].x;
+          setTimeout(() => {
+            this.level.enemies.splice(indexEnemies, 1);
+          }, 2000);
+
           // Bubble zerplatzt Animation
           this.bubbles.splice(indexBubbles, 1);
         }
@@ -102,14 +105,17 @@ class World {
   }
 
   checkBubbleShot() {
-    if (this.keyboard.KEY_B) {
+    this.isShooting = false;
+    if (this.keyboard.SPACE && this.bubbles.length <= 0) {
       this.bubble_shot_sound.play();
       if (!this.character.otherDirection) {
         let bubble = new BubbleShot();
+        this.isShooting = true;
         bubble.shotBubble(this.character.x, this.character.y);
         this.bubbles.push(bubble);
       } else {
         let bubble = new BubbleShot();
+        this.isShooting = true;
         bubble.otherDirection = true;
         bubble.shotBubble(this.character.x, this.character.y);
         this.bubbles.push(bubble);

@@ -53,14 +53,13 @@ class Character extends MovableObject {
   ];
 
   IMAGES_ATTACKING = [
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/1.png',
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/2.png',
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/3.png',
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/4.png',
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/5.png',
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/6.png',
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/7.png',
-    './graphics/1_sharkie/4.Attack/Bubble_trap/op1/8.png'
+    './graphics/1_sharkie/4.Attack/Bubble_trap/op2/1.png',
+    './graphics/1_sharkie/4.Attack/Bubble_trap/op2/2.png',
+    './graphics/1_sharkie/4.Attack/Bubble_trap/op2/3.png',
+    './graphics/1_sharkie/4.Attack/Bubble_trap/op2/4.png',
+    './graphics/1_sharkie/4.Attack/Bubble_trap/op2/5.png',
+    './graphics/1_sharkie/4.Attack/Bubble_trap/op2/6.png',
+    './graphics/1_sharkie/4.Attack/Bubble_trap/op2/7.png'
   ];
 
   // IMAGES_SHOCK = [
@@ -80,6 +79,23 @@ class Character extends MovableObject {
   collect_coin_sound = new Audio('audio/collect_coin.mp3');
   collect_poison_sound = new Audio('audio/collect_poison.mp3');
 
+  // intervals
+
+  floatInterval;
+  moveInterval;
+  animateInterval;
+  bossIntroInterval;
+  driftingInterval;
+  charIntervals = [
+    this.floatInterval,
+    this.moveInterval,
+    this.animateInterval,
+    this.bossIntroInterval,
+    this.driftingInterval
+  ];
+
+  // offets
+
   offset = {
     top: 80,
     left: 30,
@@ -97,21 +113,26 @@ class Character extends MovableObject {
     this.loadImgs(this.IMAGES_ATTACKING);
     this.loadImgs(this.IMAGES_POISONED);
     // this.loadImgs(this.IMAGES_SHOCK);
+
     this.currentAnimation = null;
     this.isAnimating = false;
+    this.dead = false;
+
     this.height = 200;
     this.width = 160;
     this.y = 150;
     this.x = 100;
-    this.animationSpeed = 150;
+
     this.coins = 0;
+
     this.move();
     this.float();
     this.checkBossTime();
+    this.animate();
   }
 
   float() {
-    setInterval(() => {
+    this.floatInterval = setInterval(() => {
       if (
         !this.world.keyboard.UP &&
         !this.world.keyboard.DOWN &&
@@ -127,13 +148,12 @@ class Character extends MovableObject {
     }, 150);
   }
 
-  isDead() {
-    return this.energy == 0;
-  }
-
   move() {
-    setInterval(() => {
+    this.moveInterval = setInterval(() => {
       this.swimming_sound.pause();
+      if (this.dead) {
+        return;
+      }
 
       if (this.world.keyboard.UP && this.y > -50 && !this.bossIntroPlaying) {
         this.y -= 4;
@@ -159,45 +179,98 @@ class Character extends MovableObject {
         this.swimming_sound.play();
       }
     }, 1000 / 60);
+  }
 
-    if (this.isAnimating) return;
+  isDead() {
+    return this.energy == 0;
+  }
 
-    const animationInterval = setInterval(() => {
+  animate() {
+    this.animateInterval = setInterval(() => {
+      if (this.isAnimating) return;
+
       if (this.isDead()) {
-        this.isAnimating = true;
-        this.playAnimation(this.IMAGES_DEAD);
+        this.dead = true;
+        this.playDeadAnimation();
       } else if (this.isHurt()) {
-        this.isAnimating = true;
-        this.ouch_sound.play();
-        this.playAnimation(this.IMAGES_POISONED);
-      } else if (this.world.keyboard.KEY_B) {
-        this.isAnimating = true;
-        this.playAnimation(this.IMAGES_ATTACKING);
-      } else {
-        if (
-          this.world.keyboard.UP ||
-          this.world.keyboard.DOWN ||
-          this.world.keyboard.RIGHT ||
-          this.world.keyboard.LEFT
-        ) {
-          this.isAnimating = true;
-          this.playAnimation(this.IMAGES_SWIMMING);
-        }
+        this.playHurtAnimation();
+      } else if (this.world.isShooting) {
+        this.playShootingAnimation();
+      } else if (
+        this.world.keyboard.UP ||
+        this.world.keyboard.DOWN ||
+        this.world.keyboard.RIGHT ||
+        this.world.keyboard.LEFT
+      ) {
+        this.playSwimmingAnimation();
       }
     }, 100);
   }
 
-  animate() {}
+  playDeadAnimation() {
+    if (!this.isAnimating) {
+      this.charIntervals.forEach(clearInterval);
+      this.isAnimating = true;
+
+      const deadInterval = setInterval(() => {
+        this.playAnimation(this.IMAGES_DEAD);
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(deadInterval);
+        this.driftingInterval = setInterval(() => {
+          this.y -= 1;
+        }, 1000 / 60);
+      }, 500);
+
+      setTimeout(() => {
+        clearInterval(this.driftingInterval);
+        this.endGame();
+      }, 3000);
+    }
+  }
+
+  playHurtAnimation() {
+    if (!this.isAnimating) {
+      this.ouch_sound.play();
+      this.playAnimation(this.IMAGES_POISONED);
+    }
+  }
+
+  playShootingAnimation() {
+    if (!this.isAnimating) {
+      this.isAnimating = true;
+      this.charIntervals.forEach(clearInterval);
+
+      this.playAnimation(this.IMAGES_ATTACKING);
+
+      setTimeout(() => {
+        this.isAnimating = false;
+      }, 1000);
+    }
+  }
+
+  playSwimmingAnimation() {
+    if (!this.isAnimating) {
+      this.isAnimating = true;
+      this.playAnimation(this.IMAGES_SWIMMING);
+      this.isAnimating = false;
+    }
+  }
+
+  endGame() {
+    console.log('Sharkie is dead');
+  }
 
   checkBossTime() {
     let bossFightStarted = false;
-    const interval = setInterval(() => {
+    this.bossIntroInterval = setInterval(() => {
       if (Math.abs(this.x - 1000) < 10) {
         if (!bossFightStarted) {
           this.startBossFight();
           bossFightStarted = true;
           this.bossIntroPlaying = true;
-          clearInterval(interval);
+          clearInterval(this.bossIntroInterval);
         } else this.bossIntroPlaying = false;
       }
     }, 1000 / 60);
@@ -225,5 +298,5 @@ class Character extends MovableObject {
     this.collect_poison_sound.play();
   }
 
-  animate() {}
+  // animate() {}
 }

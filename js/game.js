@@ -4,6 +4,7 @@ let world;
 let keyboard = new Keyboard();
 
 function init() {
+  // closeStartScreen();
   canvas = document.getElementById('canvas');
   world = new World(canvas);
 }
@@ -49,3 +50,12 @@ window.addEventListener('keyup', (event) => {
     keyboard.KEY_B = false;
   }
 });
+
+// Screen Stuff
+
+let startBtn = document.getElementById('startButton');
+
+function closeStartScreen() {
+  let startScreenContainer = document.getElementById('startScreenContainer');
+  startScreenContainer.classList.add('d-none');
+}
