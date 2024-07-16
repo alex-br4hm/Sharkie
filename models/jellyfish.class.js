@@ -23,17 +23,19 @@ class Jellyfish extends MovableObject {
   moveUpInterval;
   animateInterval;
 
-  constructor() {
+  constructor(x) {
     super().loadImg('./graphics/2_enemy/2.Jellyfish/Regular_damage/Lila1.png');
     this.loadImgs(this.IMAGES_SWIMMING);
     this.loadImgs(this.IMAGES_DEAD);
-    this.x = 500 + Math.random() * 2500;
+    this.x = x + Math.random() * 2500;
     this.y = Math.random() * 400;
     this.height = 80;
     this.width = 70;
     this.speed = 0.2 + Math.random() * 5;
     this.direction = this.speed;
     this.isDead = false;
+    this.isBoss = false;
+    this.isJelly = true;
     this.moveUp();
     this.animate();
   }
@@ -61,16 +63,15 @@ class Jellyfish extends MovableObject {
   }
 
   playAnimationDead(images_path) {
-    let i = this.currentImage % images_path.length;
-    let path = images_path[i];
-    this.img.src = path;
-    this.currentImage++;
-
     clearInterval(this.moveUpInterval);
     clearInterval(this.animateInterval);
 
     setInterval(() => {
-      this.y -= 3;
-    }, 1000 / 60);
+      let i = this.currentImage % images_path.length;
+      let path = images_path[i];
+      this.img.src = path;
+      this.currentImage++;
+      this.y -= 12;
+    }, 50);
   }
 }

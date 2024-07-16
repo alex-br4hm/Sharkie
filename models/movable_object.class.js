@@ -21,14 +21,10 @@ class MovableObject extends DrawableObject {
     );
   }
 
-  getHit() {
-    this.energy -= 5;
-    // console.log(this.energy);
-    if (this.energy < 0) {
-      this.energy = 0;
-    } else {
-      this.lastHit = new Date().getTime();
-    }
+  getHit(enemyType) {
+    enemyType.isBoss ? (this.energy -= 25) : (this.energy -= 5);
+    console.log(this.energy);
+    this.lastHit = new Date().getTime();
   }
 
   isHurt() {

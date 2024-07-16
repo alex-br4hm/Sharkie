@@ -10,11 +10,11 @@ class PoisonBottle extends MovableObject {
     './graphics/4_marcadores/Posión/Animada/8.png'
   ];
 
-  constructor() {
+  constructor(x, y) {
     super().loadImg('./graphics/4_marcadores/Posión/Animada/1.png');
     this.loadImgs(this.IMAGES_POISON);
-    this.x = 500 + Math.random() * 2500;
-    this.y = 100 + Math.random() * 300;
+    this.x = x;
+    this.y = y;
     this.height = 80;
     this.width = 70;
     this.animate();

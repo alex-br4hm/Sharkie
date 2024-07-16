@@ -17,6 +17,10 @@ class World {
 
   constructor(canvas) {
     this.ctx = canvas.getContext('2d');
+    this.ctx.font = '30px Impact';
+    this.ctx.fillStyle = 'Orange';
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.draw();
@@ -58,9 +62,15 @@ class World {
           setTimeout(() => {
             this.level.enemies.splice(indexEnemies, 1);
           }, 2000);
-
           // Bubble zerplatzt Animation
           this.bubbles.splice(indexBubbles, 1);
+        }
+      });
+      this.level.endboss.forEach((endboss) => {
+        if (endboss.isColliding(bubble)) {
+          endboss.energy -= 20;
+          this.bubbles.splice(indexBubbles, 1);
+          console.log(endboss.energy);
         }
       });
     });
@@ -69,7 +79,7 @@ class World {
   checkCollisionsEnemies() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
-        this.character.getHit();
+        this.character.getHit(enemy);
         this.statusBar.setPercentage(this.character.energy);
       }
     });
@@ -78,7 +88,8 @@ class World {
   checkCollisionsEndboss() {
     this.level.endboss.forEach((endboss) => {
       if (this.character.isColliding(endboss)) {
-        this.character.getHit();
+        console.log(this.character.energy);
+        this.character.getHit(endboss);
         this.statusBar.setPercentage(this.character.energy);
       }
     });
@@ -109,19 +120,29 @@ class World {
     if (this.keyboard.SPACE && this.bubbles.length <= 0) {
       this.bubble_shot_sound.play();
       if (!this.character.otherDirection) {
-        let bubble = new BubbleShot();
         this.isShooting = true;
-        bubble.shotBubble(this.character.x, this.character.y);
-        this.bubbles.push(bubble);
+
+        setTimeout(() => {
+          if (this.bubbles.length <= 0) {
+            let bubble = new BubbleShot();
+            bubble.shotBubble(this.character.x, this.character.y);
+            this.bubbles.push(bubble);
+          }
+        }, 500);
       } else {
-        let bubble = new BubbleShot();
         this.isShooting = true;
-        bubble.otherDirection = true;
-        bubble.shotBubble(this.character.x, this.character.y);
-        this.bubbles.push(bubble);
+
+        setTimeout(() => {
+          let bubble = new BubbleShot();
+          bubble.otherDirection = true;
+          bubble.shotBubble(this.character.x, this.character.y);
+          this.bubbles.push(bubble);
+        }, 500);
       }
     }
   }
+
+  cameraMoveBoss = 0;
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -135,9 +156,12 @@ class World {
     this.addToMap(this.statusBar);
     this.addToMap(this.poisonBar);
     this.addToMap(this.coinBar);
-    // this.ctx.fillText(this.character.coin, 50, 75);
+    // this.ctx.fillText(this.character.coin + '/12', 50, 75);
+    // this.ctx.fillText(this.character.poisonBottles + '/12', 50, 110);
 
-    this.ctx.translate(this.camera_x, 0);
+    if (this.character.bossFightStarted) {
+      this.ctx.translate(this.camera_x - 50, 0);
+    } else this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
@@ -149,7 +173,9 @@ class World {
       this.addObjectsToMap(this.bubbles);
     }
 
-    this.ctx.translate(-this.camera_x, 0);
+    if (this.character.bossFightStarted) {
+      this.ctx.translate(-this.camera_x + 50, 0);
+    } else this.ctx.translate(-this.camera_x, 0);
 
     //  draw is called again and again
     requestAnimationFrame(() => {

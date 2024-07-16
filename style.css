@@ -44,7 +44,7 @@ header h1 {
   height: 100%;
   width: 100%;
   border-radius: 20px;
-  background-image: url(./graphics/3_background/Mesa\ de\ trabajo\ 1.png);
+  background-image: url(./graphics/3_background/startscree_bg.png);
   background-size: cover;
   background-position: right;
 }
@@ -70,6 +70,9 @@ header h1 {
 }
 
 canvas {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 56px;
+  font-weight: bold;
   background-color: black;
   outline: 5px solid rgba(255, 255, 255, 0.452);
   border-radius: 20px;

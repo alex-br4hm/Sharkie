@@ -29,6 +29,7 @@ class Pufferfish extends MovableObject {
     this.width = 70;
     this.isDead = false;
     this.speed = 0.5 + Math.random() * 2;
+    this.isBoss = false;
     this.moveLeft();
     this.animate();
   }
@@ -55,14 +56,15 @@ class Pufferfish extends MovableObject {
   }
 
   playAnimationDead(images_path) {
+    clearInterval(this.moveLeftInterval);
+    clearInterval(this.animateInterval);
     let i = this.currentImage % images_path.length;
     let path = images_path[i];
     this.img.src = path;
     this.currentImage++;
-    clearInterval(this.moveLeftInterval);
-    clearInterval(this.animateInterval);
 
     setInterval(() => {
+      this.x -= 1;
       this.y -= 3;
     }, 1000 / 60);
   }

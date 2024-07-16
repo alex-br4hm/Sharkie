@@ -62,11 +62,11 @@ class Character extends MovableObject {
     './graphics/1_sharkie/4.Attack/Bubble_trap/op2/7.png'
   ];
 
-  // IMAGES_SHOCK = [
-  //   './graphics/1_sharkie/5.Hurt/2.Electric shock/1.png',
-  //   './graphics/1_sharkie/5.Hurt/2.Electric shock/2.png',
-  //   './graphics/1_sharkie/5.Hurt/2.Electric shock/3.png'
-  // ];
+  IMAGES_SHOCK = [
+    './graphics/1_sharkie/5.Hurt/2.Electric shock/1.png',
+    './graphics/1_sharkie/5.Hurt/2.Electric shock/2.png',
+    './graphics/1_sharkie/5.Hurt/2.Electric shock/3.png'
+  ];
 
   world;
   poisonBottles = 0;
@@ -112,7 +112,7 @@ class Character extends MovableObject {
     this.loadImgs(this.IMAGES_DEAD);
     this.loadImgs(this.IMAGES_ATTACKING);
     this.loadImgs(this.IMAGES_POISONED);
-    // this.loadImgs(this.IMAGES_SHOCK);
+    this.loadImgs(this.IMAGES_SHOCK);
 
     this.currentAnimation = null;
     this.isAnimating = false;
@@ -188,6 +188,7 @@ class Character extends MovableObject {
   animate() {
     this.animateInterval = setInterval(() => {
       if (this.isAnimating) return;
+      if (this.dead) return;
 
       if (this.isDead()) {
         this.dead = true;
@@ -204,50 +205,66 @@ class Character extends MovableObject {
       ) {
         this.playSwimmingAnimation();
       }
-    }, 100);
+    }, 80);
   }
 
   playDeadAnimation() {
-    if (!this.isAnimating) {
-      this.charIntervals.forEach(clearInterval);
-      this.isAnimating = true;
+    this.charIntervals.forEach(clearInterval);
+    clearInterval(this.animateInterval);
+    clearInterval(this.floatInterval);
+    this.isAnimating = true;
 
-      const deadInterval = setInterval(() => {
-        this.playAnimation(this.IMAGES_DEAD);
-      }, 100);
+    let animationCounter = 0;
+    const deadInterval = setInterval(() => {
+      if (animationCounter < this.IMAGES_DEAD.length) {
+        let path = this.IMAGES_DEAD[animationCounter];
+        this.img.src = path;
+        animationCounter++;
+      } else this.img.src = this.IMAGES_DEAD[11];
+    }, 1000 / 10);
 
-      setTimeout(() => {
-        clearInterval(deadInterval);
-        this.driftingInterval = setInterval(() => {
-          this.y -= 1;
-        }, 1000 / 60);
-      }, 500);
+    setTimeout(() => {
+      this.driftingInterval = setInterval(() => {
+        this.y -= 3;
+      }, 1000 / 10);
+    }, 1000);
 
-      setTimeout(() => {
-        clearInterval(this.driftingInterval);
-        this.endGame();
-      }, 3000);
-    }
-  }
-
-  playHurtAnimation() {
-    if (!this.isAnimating) {
-      this.ouch_sound.play();
-      this.playAnimation(this.IMAGES_POISONED);
-    }
+    setTimeout(() => {
+      clearInterval(this.driftingInterval);
+      this.endGame();
+    }, 3000);
   }
 
   playShootingAnimation() {
-    if (!this.isAnimating) {
-      this.isAnimating = true;
-      this.charIntervals.forEach(clearInterval);
+    this.charIntervals.forEach(clearInterval);
+    clearInterval(this.animateInterval);
+    clearInterval(this.floatInterval);
 
-      this.playAnimation(this.IMAGES_ATTACKING);
+    let animationCounter = 0;
+    console.log('me?');
+    const deadInterval = setInterval(() => {
+      if (animationCounter < this.IMAGES_ATTACKING.length) {
+        let path = this.IMAGES_ATTACKING[animationCounter];
+        this.img.src = path;
+        animationCounter++;
+        // console.log(animationCounter);
+      } else {
+        clearInterval(deadInterval);
+        this.animate();
+        this.float();
+      }
+    }, 1000 / 10);
 
-      setTimeout(() => {
-        this.isAnimating = false;
-      }, 1000);
-    }
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, 1000);
+  }
+
+  playHurtAnimation() {
+    if (this.energy > 0) {
+      this.ouch_sound.play();
+      this.playAnimation(this.IMAGES_POISONED);
+    } else this.dead = true;
   }
 
   playSwimmingAnimation() {
@@ -262,13 +279,15 @@ class Character extends MovableObject {
     console.log('Sharkie is dead');
   }
 
+  bossFightStarted = false;
+
   checkBossTime() {
-    let bossFightStarted = false;
+    // this.bossFightStarted = false;
     this.bossIntroInterval = setInterval(() => {
-      if (Math.abs(this.x - 1000) < 10) {
-        if (!bossFightStarted) {
+      if (Math.abs(this.x - 3200) < 10) {
+        if (!this.bossFightStarted) {
           this.startBossFight();
-          bossFightStarted = true;
+          this.bossFightStarted = true;
           this.bossIntroPlaying = true;
           clearInterval(this.bossIntroInterval);
         } else this.bossIntroPlaying = false;
