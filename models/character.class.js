@@ -68,18 +68,15 @@ class Character extends MovableObject {
     './graphics/1_sharkie/5.Hurt/2.Electric shock/3.png'
   ];
 
-  world;
   poisonBottles = 0;
 
   bossIntroPlaying = false;
 
-  // Sounds
   swimming_sound = new Audio('audio/swim.mp3');
   ouch_sound = new Audio('audio/ouch.mp3');
   collect_coin_sound = new Audio('audio/collect_coin.mp3');
   collect_poison_sound = new Audio('audio/collect_poison.mp3');
-
-  // intervals
+  boss_music = new Audio('audio/boss_music.mp3');
 
   floatInterval;
   moveInterval;
@@ -94,16 +91,12 @@ class Character extends MovableObject {
     this.driftingInterval
   ];
 
-  // offets
-
   offset = {
     top: 80,
     left: 30,
     right: 30,
     bottom: 30
   };
-
-  boss_music = new Audio('audio/boss_music.mp3');
 
   constructor() {
     super().loadImg('./graphics/1_sharkie/3.Swim/1.png');
@@ -117,18 +110,38 @@ class Character extends MovableObject {
     this.currentAnimation = null;
     this.isAnimating = false;
     this.dead = false;
+    this.world;
 
     this.height = 200;
     this.width = 160;
     this.y = 150;
-    this.x = 100;
-
+    this.x = 150;
     this.coins = 0;
 
+    this.setSounds();
     this.move();
     this.float();
     this.checkBossTime();
     this.animate();
+    this.checkDead();
+  }
+
+  setSounds() {
+    setTimeout(() => {
+      this.world.sounds.push(
+        this.swimming_sound,
+        this.ouch_sound,
+        this.collect_coin_sound,
+        this.collect_poison_sound,
+        this.boss_music
+      );
+
+      world.sounds.forEach((sound) => {
+        if (sound.src.includes('level_music')) {
+          sound.volume = 0.4;
+        } else sound.volume = 0.2;
+      });
+    }, 100);
   }
 
   float() {
@@ -168,14 +181,14 @@ class Character extends MovableObject {
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.bossIntroPlaying) {
         this.x += 4;
         this.otherDirection = false;
-        this.world.camera_x = -this.x + 100;
+        this.world.camera_x = -this.x + 150;
         this.swimming_sound.play();
       }
 
       if (this.world.keyboard.LEFT && this.x > -500 && !this.bossIntroPlaying) {
         this.x -= 4;
         this.otherDirection = true;
-        this.world.camera_x = -this.x + 100;
+        this.world.camera_x = -this.x + 150;
         this.swimming_sound.play();
       }
     }, 1000 / 60);
@@ -192,7 +205,6 @@ class Character extends MovableObject {
 
       if (this.isDead()) {
         this.dead = true;
-        this.playDeadAnimation();
       } else if (this.isHurt()) {
         this.playHurtAnimation();
       } else if (this.world.isShooting) {
@@ -208,8 +220,17 @@ class Character extends MovableObject {
     }, 80);
   }
 
+  checkDead() {
+    let deadObserver = false;
+    setInterval(() => {
+      if (this.dead && !deadObserver) {
+        deadObserver = true;
+        this.playDeadAnimation();
+      }
+    }, 80);
+  }
+
   playDeadAnimation() {
-    this.charIntervals.forEach(clearInterval);
     clearInterval(this.animateInterval);
     clearInterval(this.floatInterval);
     this.isAnimating = true;
@@ -239,15 +260,13 @@ class Character extends MovableObject {
     this.charIntervals.forEach(clearInterval);
     clearInterval(this.animateInterval);
     clearInterval(this.floatInterval);
-
     let animationCounter = 0;
-    console.log('me?');
+
     const deadInterval = setInterval(() => {
       if (animationCounter < this.IMAGES_ATTACKING.length) {
         let path = this.IMAGES_ATTACKING[animationCounter];
         this.img.src = path;
         animationCounter++;
-        // console.log(animationCounter);
       } else {
         clearInterval(deadInterval);
         this.animate();
@@ -276,13 +295,12 @@ class Character extends MovableObject {
   }
 
   endGame() {
-    console.log('Sharkie is dead');
+    endGameAfterLose();
   }
 
   bossFightStarted = false;
 
   checkBossTime() {
-    // this.bossFightStarted = false;
     this.bossIntroInterval = setInterval(() => {
       if (Math.abs(this.x - 3200) < 10) {
         if (!this.bossFightStarted) {
@@ -296,9 +314,8 @@ class Character extends MovableObject {
   }
 
   startBossFight() {
-    console.log('lets go');
     this.boss_music.play();
-    // world.level_music.stop();
+    this.world.level_music.pause();
     this.world.level.endboss[0].init();
     setTimeout(() => {
       this.bossIntroPlaying = false;
@@ -316,6 +333,4 @@ class Character extends MovableObject {
     this.collect_poison_sound.currentTime = 0;
     this.collect_poison_sound.play();
   }
-
-  // animate() {}
 }

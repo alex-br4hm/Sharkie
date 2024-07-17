@@ -11,7 +11,6 @@ class MovableObject extends DrawableObject {
     bottom: 0
   };
 
-  // characater.isColliding
   isColliding(obj) {
     return (
       this.x + this.width - this.offset.right > obj.x + obj.offset.left &&
@@ -23,7 +22,6 @@ class MovableObject extends DrawableObject {
 
   getHit(enemyType) {
     enemyType.isBoss ? (this.energy -= 25) : (this.energy -= 5);
-    console.log(this.energy);
     this.lastHit = new Date().getTime();
   }
 

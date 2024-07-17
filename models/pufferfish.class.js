@@ -24,11 +24,12 @@ class Pufferfish extends MovableObject {
     this.loadImgs(this.IMAGES_SWIMMING);
     this.loadImgs(this.IMAGES_DEAD);
     this.x = 500 + Math.random() * 2000;
+    this.initialX = this.x;
     this.y = Math.random() * 400;
     this.height = 80;
     this.width = 70;
     this.isDead = false;
-    this.speed = 0.5 + Math.random() * 2;
+    this.speed = 0.8 + Math.random() * 2;
     this.isBoss = false;
     this.moveLeft();
     this.animate();
@@ -36,12 +37,19 @@ class Pufferfish extends MovableObject {
 
   moveLeft() {
     this.moveLeftInterval = setInterval(() => {
-      if (this.x < -100) {
-        this.x = 720 + Math.random() * 500;
-        this.y = Math.random() * 400;
-        this.speed = 0.5 + Math.random() * 2;
+      if (this.x <= -100) {
+        this.otherDirection = true;
       }
-      this.x -= this.speed;
+
+      if (this.x >= this.initialX) {
+        this.otherDirection = false;
+      }
+
+      if (this.otherDirection) {
+        this.x += this.speed;
+      } else if (!this.otherDirection) {
+        this.x -= this.speed;
+      }
     }, 1000 / 60);
   }
 

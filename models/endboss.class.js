@@ -56,7 +56,9 @@ class Endboss extends MovableObject {
   hurtAnimationInterval;
   checkHurtInterval;
   dyingInterval;
+
   cooldown = false;
+  animationCounter = 0;
 
   constructor() {
     super();
@@ -65,9 +67,7 @@ class Endboss extends MovableObject {
     this.loadImgs(this.IMAGES_ATTACK);
     this.loadImgs(this.IMAGES_HURT);
     this.loadImgs(this.IMAGES_DEATH);
-    this.previousEnergy = this.energy; // Initialer Energiezustand
-    // this.introduce();
-    // this.animate();
+    this.previousEnergy = this.energy;
   }
 
   init() {
@@ -82,8 +82,8 @@ class Endboss extends MovableObject {
     this.height = 500;
     this.x = 3500;
     this.y = -100;
-    this.energy = 100; // Initialer Energiezustand
-    this.previousEnergy = this.energy; // Initialer Energiezustand speichern
+    this.energy = 100;
+    this.previousEnergy = this.energy;
     this.isBoss = true;
     this.isHurted = false;
     this.isDead = false;
@@ -137,7 +137,6 @@ class Endboss extends MovableObject {
     }, 1000 / 60);
   }
 
-  animationCounter = 0;
   bossDeafeted() {
     this.isDead = true;
     clearInterval(this.swimmingInterval);
@@ -156,6 +155,9 @@ class Endboss extends MovableObject {
     setTimeout(() => {
       this.img.src = this.IMAGES_DEATH[4];
       clearInterval(this.dyingInterval);
+      setTimeout(() => {
+        endGameAfterWin();
+      }, 2000);
     }, 1000);
   }
 

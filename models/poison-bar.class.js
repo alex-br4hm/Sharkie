@@ -21,9 +21,11 @@ class Poisonbar extends DrawableObject {
   }
 
   setAmount(amount) {
-    this.amount = amount;
-    let path = this.IMAGES_POISON[this.resolveImageIndex()];
-    this.img.src = path;
+    setInterval(() => {
+      this.amount = world.character.poisonBottles;
+      let path = this.IMAGES_POISON[this.resolveImageIndex()];
+      this.img.src = path;
+    }, 100);
   }
 
   resolveImageIndex() {

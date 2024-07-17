@@ -15,7 +15,7 @@ class BubbleShot extends MovableObject {
   shotBubble(x, y) {
     if (world.character.poisonBottles > 0) {
       this.img.src = this.IMAGES_POISON_BUBBLE[0];
-      world.character.poisonBottles--;
+      world.character.poisonBottles -= 1;
     }
 
     this.y = y + 100;

@@ -11,6 +11,7 @@ class World {
   bubbles = [];
   endboss = this.level.endboss;
   isShooting = false;
+  sounds = [];
 
   level_music = new Audio('audio/level_music.mp3');
   bubble_shot_sound = new Audio('audio/bubble_shot.mp3');
@@ -26,12 +27,13 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-    this.level_music.loop = true;
 
+    this.level_music.loop = true;
     this.level_music.play();
   }
 
   setWorld() {
+    this.sounds.push(this.level_music, this.bubble_shot_sound);
     this.character.world = this;
   }
 
@@ -55,6 +57,7 @@ class World {
       if (bubble.distance > 70) {
         this.bubbles.splice(indexBubbles, 1);
       }
+
       this.level.enemies.forEach((enemy, indexEnemies) => {
         if (enemy.isColliding(bubble)) {
           this.level.enemies[indexEnemies].isDead = true;
@@ -62,15 +65,14 @@ class World {
           setTimeout(() => {
             this.level.enemies.splice(indexEnemies, 1);
           }, 2000);
-          // Bubble zerplatzt Animation
           this.bubbles.splice(indexBubbles, 1);
         }
       });
+
       this.level.endboss.forEach((endboss) => {
         if (endboss.isColliding(bubble)) {
-          endboss.energy -= 20;
+          this.character.poisonBottles > 0 ? (endboss.energy -= 30) : (endboss.energy -= 20);
           this.bubbles.splice(indexBubbles, 1);
-          console.log(endboss.energy);
         }
       });
     });
@@ -88,7 +90,6 @@ class World {
   checkCollisionsEndboss() {
     this.level.endboss.forEach((endboss) => {
       if (this.character.isColliding(endboss)) {
-        console.log(this.character.energy);
         this.character.getHit(endboss);
         this.statusBar.setPercentage(this.character.energy);
       }
@@ -117,6 +118,7 @@ class World {
 
   checkBubbleShot() {
     this.isShooting = false;
+
     if (this.keyboard.SPACE && this.bubbles.length <= 0) {
       this.bubble_shot_sound.play();
       if (!this.character.otherDirection) {
@@ -142,26 +144,13 @@ class World {
     }
   }
 
-  cameraMoveBoss = 0;
-
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // console.log(this.character.x);
 
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObject);
     this.ctx.translate(-this.camera_x, 0);
-    // HERE FIXED OBJECTS
-    this.addToMap(this.statusBar);
-    this.addToMap(this.poisonBar);
-    this.addToMap(this.coinBar);
-    // this.ctx.fillText(this.character.coin + '/12', 50, 75);
-    // this.ctx.fillText(this.character.poisonBottles + '/12', 50, 110);
-
-    if (this.character.bossFightStarted) {
-      this.ctx.translate(this.camera_x - 50, 0);
-    } else this.ctx.translate(this.camera_x, 0);
+    this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
@@ -173,11 +162,12 @@ class World {
       this.addObjectsToMap(this.bubbles);
     }
 
-    if (this.character.bossFightStarted) {
-      this.ctx.translate(-this.camera_x + 50, 0);
-    } else this.ctx.translate(-this.camera_x, 0);
+    this.ctx.translate(-this.camera_x, 0);
 
-    //  draw is called again and again
+    this.addToMap(this.statusBar);
+    this.addToMap(this.poisonBar);
+    this.addToMap(this.coinBar);
+
     requestAnimationFrame(() => {
       this.draw();
     });
@@ -195,7 +185,7 @@ class World {
     }
 
     movableObject.draw(this.ctx);
-    movableObject.drawFrame(this.ctx);
+    // movableObject.drawFrame(this.ctx);
 
     if (movableObject.otherDirection) {
       this.flipImageBack(movableObject);

@@ -27,7 +27,7 @@ class Jellyfish extends MovableObject {
     super().loadImg('./graphics/2_enemy/2.Jellyfish/Regular_damage/Lila1.png');
     this.loadImgs(this.IMAGES_SWIMMING);
     this.loadImgs(this.IMAGES_DEAD);
-    this.x = x + Math.random() * 2500;
+    this.x = x + Math.random() * 1800;
     this.y = Math.random() * 400;
     this.height = 80;
     this.width = 70;
@@ -47,10 +47,10 @@ class Jellyfish extends MovableObject {
         this.playAnimationDead(this.IMAGES_DEAD);
       }
       if (this.y <= 0) {
-        this.direction = this.speed; // Wechsel zu nach unten
+        this.direction = this.speed;
         this.otherDirection = true;
       } else if (this.y >= 420) {
-        this.direction = -this.speed; // Wechsel zu nach oben
+        this.direction = -this.speed;
         this.otherDirection = false;
       }
     }, 1000 / 60);
