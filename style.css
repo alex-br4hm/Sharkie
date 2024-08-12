@@ -84,7 +84,7 @@ header h1 {
 .arrow-up {
   position: absolute;
   rotate: 90deg;
-  right: 31%;
+  right: 33%;
   top: 0;
   scale: 110%;
 }
@@ -99,7 +99,7 @@ header h1 {
   position: absolute;
   rotate: 270deg;
   bottom: 0;
-  right: 31%;
+  right: 33%;
   scale: 110%;
 }
 /* .full-screen-btn {

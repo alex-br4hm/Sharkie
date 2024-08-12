@@ -6,26 +6,31 @@ let gameRunning = false;
 updateSizeInfo();
 
 function init() {
+  world = null;
   closeStartEndScreen();
   initLevel();
   canvas = document.getElementById('canvas');
   world = new World(canvas);
-  unmuteSounds();
+  muteSounds();
   gameRunning = true;
   showMobileBtns();
 }
 
+function restartGame() {
+  init(); 
+}
+
 window.addEventListener('keydown', (event) => {
-  if (event.code === 'KeyW') {
+  if (event.code === 'ArrowUp') {
     keyboard.UP = true;
   }
-  if (event.code === 'KeyS') {
+  if (event.code === 'ArrowDown') {
     keyboard.DOWN = true;
   }
-  if (event.code === 'KeyA') {
+  if (event.code === 'ArrowLeft') {
     keyboard.LEFT = true;
   }
-  if (event.code === 'KeyD') {
+  if (event.code === 'ArrowRight') {
     keyboard.RIGHT = true;
   }
   if (event.code === 'Space') {
@@ -37,16 +42,16 @@ window.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('keyup', (event) => {
-  if (event.code === 'KeyW') {
+  if (event.code === 'ArrowUp') {
     keyboard.UP = false;
   }
-  if (event.code === 'KeyS') {
+  if (event.code === 'ArrowDown') {
     keyboard.DOWN = false;
   }
-  if (event.code === 'KeyA') {
+  if (event.code === 'ArrowLeft') {
     keyboard.LEFT = false;
   }
-  if (event.code === 'KeyD') {
+  if (event.code === 'ArrowRight') {
     keyboard.RIGHT = false;
   }
   if (event.code === 'Space') {
@@ -63,47 +68,47 @@ document.getElementById('arrowLeft').addEventListener('touchstart', (event) => {
 });
 
 document.getElementById('arrowLeft').addEventListener('touchend', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.LEFT = false;
 });
 
 document.getElementById('arrowUp').addEventListener('touchstart', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.UP = true;
 });
 
 document.getElementById('arrowUp').addEventListener('touchend', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.UP = false;
 });
 
 document.getElementById('arrowRight').addEventListener('touchstart', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.RIGHT = true;
 });
 
 document.getElementById('arrowRight').addEventListener('touchend', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.RIGHT = false;
 });
 
 document.getElementById('arrowDown').addEventListener('touchstart', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.DOWN = true;
 });
 
 document.getElementById('arrowDown').addEventListener('touchend', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.DOWN = false;
 });
 
 document.getElementById('attackBtn').addEventListener('touchstart', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.SPACE = true;
 });
 
 document.getElementById('attackBtn').addEventListener('touchend', (event) => {
-  event.preventDefault;
+  event.preventDefault();
   keyboard.SPACE = false;
 });
 
@@ -129,6 +134,7 @@ function endGameAfterLose() {
 function endGameAfterWin() {
   let winScreenContainer = document.getElementById('endScreenWinContainer');
   winScreenContainer.classList.remove('d-none');
+  
 }
 
 function muteSounds() {
@@ -136,9 +142,13 @@ function muteSounds() {
   let volumeIsOffBtn = document.getElementById('volumeIsOffBtn');
   volumeIsOnBtn.classList.add('d-none');
   volumeIsOffBtn.classList.remove('d-none');
-  world.sounds.forEach((sound) => {
-    sound.volume = 0;
-  });
+
+  setTimeout(() => {
+    world.sounds.forEach((sound) => {
+      sound.volume = 0;
+    });
+  }, 100);
+ 
 }
 
 function unmuteSounds() {
