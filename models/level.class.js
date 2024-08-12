@@ -3,7 +3,7 @@ class Level {
   backgroundObject;
   coins = [];
   poisonBottles = [];
-  endboss = [];
+  endboss;
   level_end_x = 3500;
 
   constructor(enemies, endboss, backgroundObject, coins, poisonBottles) {

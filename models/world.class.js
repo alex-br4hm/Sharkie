@@ -16,6 +16,8 @@ class World {
   level_music = new Audio('audio/level_music.mp3');
   bubble_shot_sound = new Audio('audio/bubble_shot.mp3');
 
+  
+
   constructor(canvas) {
     this.ctx = canvas.getContext('2d');
     this.ctx.font = '30px Impact';
@@ -27,7 +29,7 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-
+    this.checkForDead();
     this.level_music.loop = true;
     this.level_music.play();
   }
@@ -35,6 +37,24 @@ class World {
   setWorld() {
     this.sounds.push(this.level_music, this.bubble_shot_sound);
     this.character.world = this;
+  }
+
+  checkForDead() {
+   setInterval(() => {
+     if(this.character.energy <= 0 ) {
+      this.clearAllIntervals();
+     }
+
+     if(this.endboss[0].energy <= 0) {
+      this.clearAllIntervals();
+     }
+   }, 200);
+  }
+
+  clearAllIntervals() {
+    setTimeout(() => {
+      for (let i = 1; i < 9999; i++) window.clearInterval(i);
+    }, 4000);
   }
 
   run() {
@@ -203,4 +223,6 @@ class World {
     movableObject.x = movableObject.x * -1;
     this.ctx.restore();
   }
+
+
 }

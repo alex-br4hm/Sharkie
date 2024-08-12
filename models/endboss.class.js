@@ -67,6 +67,7 @@ class Endboss extends MovableObject {
     this.loadImgs(this.IMAGES_ATTACK);
     this.loadImgs(this.IMAGES_HURT);
     this.loadImgs(this.IMAGES_DEATH);
+    this.energy = 100;
     this.previousEnergy = this.energy;
   }
 
@@ -88,6 +89,15 @@ class Endboss extends MovableObject {
     this.isHurted = false;
     this.isDead = false;
     this.introduce();
+    this.debugHP();
+  }
+
+  debugHP() {
+    setInterval(() => {
+      console.log('ENDBOSS:')
+      console.log(this.energy);
+      console.log('____________')
+    }, 1000);
   }
 
   introduce() {

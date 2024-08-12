@@ -2,9 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="shortcut icon" href="./graphics/2_enemy/2.Jellyfish/Súper dangerous/Pink 2.png" type="image/x-icon" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link
+      rel="stylesheet"
+      href="style.css"
+    />
+    <link
+      rel="shortcut icon"
+      href="./graphics/2_enemy/2.Jellyfish/Súper dangerous/Pink 2.png"
+      type="image/x-icon"
+    />
     <title>Sharkie</title>
 
     <script src="./models/drawable_object.class.js"></script>
@@ -30,50 +40,111 @@
 
     <script src="./levels/level1.js"></script>
 
-    <script src="./js/game.js" defer></script>
+    <script
+      src="./js/game.js"
+      defer
+    ></script>
   </head>
 
   <!-- <body onload="init()"> -->
   <body>
     <div class="content-container">
-      <div class="canvas-container" id="canvasContainer">
-        <canvas id="canvas" width="900" height="480"></canvas>
+      <div
+        class="canvas-container"
+        id="canvasContainer"
+      >
+        <canvas
+          id="canvas"
+          width="900"
+          height="480"
+        ></canvas>
 
-        <div class="start-screen-container" id="startScreenContainer">
+        <div
+          class="start-screen-container"
+          id="startScreenContainer"
+        >
           <header>
             <h1>Sharkie</h1>
             <!-- <p>just keep swimming</p> -->
           </header>
-          <img src="./graphics/6_botones/Instructions2.png" alt="" class="controls-info" />
-          <img src="./graphics/6_botones/Start/1.png" id="startButton" alt="" class="start-game-btn" onclick="init()" />
-        </div>
-
-        <div class="mobile-control d-none" id="mobileControl">
-          <img class="arrow-left" id="arrowLeft" src="./graphics/6_botones/arrow-icon.png" alt="" />
-          <img class="arrow-up" id="arrowUp" src="./graphics/6_botones/arrow-icon.png" alt="" />
-          <img class="arrow-right" id="arrowRight" src="./graphics/6_botones/arrow-icon.png" alt="" />
-          <img class="arrow-down" id="arrowDown" src="./graphics/6_botones/arrow-icon.png" alt="" />
-        </div>
-        <img src="./graphics/6_botones/Tittles/Attack.png" id="attackBtn" alt="" class="attack-btn d-none" />
-
-        <div class="end-screen-container-lose d-none" id="endScreenLoseContainer">
-          <img src="./graphics/6_botones/Tittles/Game_Over/game_over.png" alt="" class="game-over" />
           <img
-            src="./graphics/6_botones/try_again/try_again.png"
-            id="tryAgainBtn"
+            src="./graphics/6_botones/Instructions2.png"
             alt=""
-            class="start-game-btn try-again-btn"
-            onclick="window.location.reload()"
+            class="controls-info"
+          />
+          <img
+            src="./graphics/6_botones/Start/1.png"
+            id="startButton"
+            alt=""
+            class="start-game-btn"
+            onclick="init()"
           />
         </div>
 
-        <div class="end-screen-container d-none" id="endScreenWinContainer">
+        <div
+          class="mobile-control d-none"
+          id="mobileControl"
+        >
+          <img
+            class="arrow-left"
+            id="arrowLeft"
+            src="./graphics/6_botones/arrow-icon.png"
+            alt=""
+          />
+          <img
+            class="arrow-up"
+            id="arrowUp"
+            src="./graphics/6_botones/arrow-icon.png"
+            alt=""
+          />
+          <img
+            class="arrow-right"
+            id="arrowRight"
+            src="./graphics/6_botones/arrow-icon.png"
+            alt=""
+          />
+          <img
+            class="arrow-down"
+            id="arrowDown"
+            src="./graphics/6_botones/arrow-icon.png"
+            alt=""
+          />
+        </div>
+        <img
+          src="./graphics/6_botones/Tittles/Attack.png"
+          id="attackBtn"
+          alt=""
+          class="attack-btn d-none"
+        />
+
+        <div
+          class="end-screen-container-lose d-none"
+          id="endScreenLoseContainer"
+        >
+          <img
+            src="./graphics/6_botones/Tittles/Game_Over/game_over.png"
+            alt=""
+            class="game-over"
+          />
           <img
             src="./graphics/6_botones/try_again/try_again.png"
             id="tryAgainBtn"
             alt=""
             class="start-game-btn try-again-btn"
-            onclick="window.location.reload()"
+            onclick="restartGame()"
+          />
+        </div>
+
+        <div
+          class="end-screen-container d-none"
+          id="endScreenWinContainer"
+        >
+          <img
+            src="./graphics/6_botones/try_again/try_again.png"
+            id="tryAgainBtn"
+            alt=""
+            class="start-game-btn try-again-btn"
+            onclick="restartGame()"
           />
         </div>
 
@@ -95,7 +166,10 @@
         <!-- <img src="./graphics/6_botones/fullscreen.svg" class="full-screen-btn" onclick="fullscreen()" alt="" /> -->
       </div>
     </div>
-    <div class="turn-device-overlay d-none" id="turnDeviceOverlay">
+    <div
+      class="turn-device-overlay d-none"
+      id="turnDeviceOverlay"
+    >
       <h2>please turn your device :)</h2>
     </div>
   </body>

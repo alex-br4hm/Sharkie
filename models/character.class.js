@@ -112,6 +112,8 @@ class Character extends MovableObject {
     this.dead = false;
     this.world;
 
+
+    this.energy = 100;
     this.height = 200;
     this.width = 160;
     this.y = 150;
