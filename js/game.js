@@ -191,43 +191,12 @@ function updateSizeInfo() {
 
 window.addEventListener('resize', updateSizeInfo);
 
-// DIDNT WORK WELL - later
+let legalNoticeContainer = document.getElementById('legalNoticeContainer');
 
-// function fullscreen() {
-//   let fullscreen = document.getElementById('canvasContainer');
-//   enterFullscreen(fullscreen);
+function closeLegalNotice() {
+  legalNoticeContainer.classList.add('d-none');
+}
 
-//   canvas = document.querySelector('canvas');
-//   canvas.width = window.innerWidth;
-//   canvas.height = window.innerHeight;
-// }
-
-// function enterFullscreen(element) {
-//   if (element.requestFullscreen) {
-//     element.requestFullscreen();
-//   } else if (element.msRequestFullscreen) {
-//     element.msRequestFullscreen();
-//   } else if (element.webkitRequestFullscreen) {
-//     element.webkitRequestFullscreen();
-//   }
-// }
-
-// document.addEventListener('keydown', (event) => {
-//   if (event.key === 'Escape') {
-//     event.preventDefault();
-//     exitFullscreenS();
-//   }
-// });
-
-// function exitFullscreenS() {
-//   console.log('hello');
-//   if (document.exitFullscreen) {
-//     document.exitFullscreen();
-//   } else if (document.webkitExitFullscreen) {
-//     document.webkitExitFullscreen();
-//   }
-
-//   canvas = document.querySelector('canvas');
-//   canvas.width = 900;
-//   canvas.height = 480;
-// }
+function openLegalNotice() {
+    legalNoticeContainer.classList.remove('d-none');
+}

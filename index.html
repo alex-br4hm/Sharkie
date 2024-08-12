@@ -79,6 +79,12 @@
             class="start-game-btn"
             onclick="init()"
           />
+          <div
+            class="legal-notice-link"
+            onclick="openLegalNotice() "
+          >
+            legal notice
+          </div>
         </div>
 
         <div
@@ -162,8 +168,6 @@
           alt=""
           onclick="unmuteSounds()"
         />
-
-        <!-- <img src="./graphics/6_botones/fullscreen.svg" class="full-screen-btn" onclick="fullscreen()" alt="" /> -->
       </div>
     </div>
     <div
@@ -171,6 +175,25 @@
       id="turnDeviceOverlay"
     >
       <h2>please turn your device :)</h2>
+    </div>
+
+    <div
+      class="legal-notice-container d-none"
+      id="legalNoticeContainer"
+    >
+      <div
+        class="close-cross"
+        onclick="closeLegalNotice()"
+      >
+        &#10006;
+      </div>
+      <div class="impressum">
+        <h2>Impressum</h2>
+        <div>Alexander Hähnlein</div>
+        <div>99894 Friedrichroda</div>
+        <div>Deutschland</div>
+        <div class="mail">dev@haehnlein-alexander.org</div>
+      </div>
     </div>
   </body>
 </html>

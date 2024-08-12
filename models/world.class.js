@@ -205,7 +205,6 @@ class World {
     }
 
     movableObject.draw(this.ctx);
-    // movableObject.drawFrame(this.ctx);
 
     if (movableObject.otherDirection) {
       this.flipImageBack(movableObject);
@@ -223,6 +222,4 @@ class World {
     movableObject.x = movableObject.x * -1;
     this.ctx.restore();
   }
-
-
 }
