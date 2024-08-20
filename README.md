@@ -2,7 +2,7 @@
 
 Welcome to **Sharkie**, a simple yet engaging Jump-and-Run browser game. In this game, you help Sharkie navigate through underwater levels, collecting coins and poison bottles to ultimately face the menacing killer whale.
 
-![Sharkie Screenshot](https://your-image-link-here) <!-- Add a link to a screenshot of your game -->
+
 
 ##  Gameplay
 
